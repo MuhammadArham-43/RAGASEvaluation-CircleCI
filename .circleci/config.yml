@@ -1,0 +1,25 @@
+version: 2.1
+
+jobs:
+  rag_evaluation:
+    docker:
+      - image: cimg/python:3.10
+    steps:
+      - checkout
+      - run:
+          name: Install dependencies
+          command: pip install -r requirements.txt
+      - run:
+          name: Run RAGAS Evaluation
+          command: python3 main.py
+      - store_artifacts:
+          path: ragas_results.csv
+          destination: ragas_evaluation_results
+      - store_artifacts:
+          path: rag_results.json
+          destination: rag_raw_results
+
+workflows:
+  pipeline:
+    jobs:
+      - rag_evaluation
