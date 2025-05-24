@@ -1,0 +1,8 @@
+ragas
+faiss-cpu
+langchain
+together
+datasets
+numpy
+pandas
+langchain-together
