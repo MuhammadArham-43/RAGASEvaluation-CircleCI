@@ -10,9 +10,10 @@ class RAGASEvaluator:
     """Handles the evaluation of RAG pipeline results using RAGAS metrics"""
     def __init__(self, evaluator_llm: BaseChatModel) -> None:
         self.evaluator_llm = evaluator_llm
+        # -- Using relevant RAG metrics: Change as required -- #
         self.metrics = [Faithfulness(), FactualCorrectness(), LLMContextRecall()]
     
-    def evaluate_results(self, rag_results: T.List[T.Dict[str, T.Any]]) -> pd.DataFrame:
+    def evaluate_results(self, rag_results: T.List[T.Dict[str, str]]) -> pd.DataFrame:
         """
         Performs RAGAS evaluation on the collected RAG results.
 

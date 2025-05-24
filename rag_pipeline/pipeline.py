@@ -14,11 +14,11 @@ class RAGPipeline:
         self.vectorstore: FAISS = None
         self.qa_chain: RetrievalQA = None
     
-    def build_vector_store(self, documents: T.List[Document]):
+    def build_vector_store(self, documents: T.List[Document]) -> None:
         print("Embedding documents with FAISS vectorstore")
         self.vectorstore = FAISS.from_documents(documents, self.embedding_provider)
     
-    def setup_qa_chain(self):
+    def setup_qa_chain(self) -> None:
         if not self.vectorstore:
             self.build_vector_store()
         self.qa_chain = RetrievalQA.from_chain_type(
@@ -31,7 +31,7 @@ class RAGPipeline:
         self,
         hf_dataset_sample: Dataset,
         query_sample_size: int = 30
-    ):
+    ) -> T.List[T.Dict[str, str]]:
         """
         Runs RAG queries against the pipeline and collects results for RAGAS evaluation.
 
@@ -53,10 +53,12 @@ class RAGPipeline:
             query = item["instruction"]
             ground_truth = item["response"]
 
-            response = self.qa_chain.invoke({"query": query})
+            # Generates response for a query
+            response = self.qa_chain.invoke({"query": query})   
             answer = response["result"]
 
-            retrieved_docs = self.qa_chain.retriever.invoke(query)
+            # Only fetches the relevant documents from knowlege base used as context for the response
+            retrieved_docs = self.qa_chain.retriever.invoke(query)  
             contexts = [doc.page_content for doc in retrieved_docs]
 
             results.append({
@@ -66,7 +68,3 @@ class RAGPipeline:
                 "ground_truth": ground_truth
             })
         return results
-
-
-
-        

@@ -33,6 +33,7 @@ jobs:
           command: pip install -r requirements.txt
       - run:
           name: Run RAGAS Evaluation
+          # Passes parameters to Python process execution environment. Overrides default values.
           command: |
             EMBEDDING_MODEL_NAME="<< pipeline.parameters.embedding_model >>" \
             LLM_MODEL_NAME="<< pipeline.parameters.llm_model >>" \
