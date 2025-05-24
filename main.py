@@ -10,8 +10,13 @@ EMBEDDING_MODEL_NAME = os.getenv("EMBEDDING_MODEL_NAME", "BAAI/bge-base-en-v1.5"
 LLM_MODEL_NAME = os.getenv("LLM_MODEL_NAME", "meta-llama/Llama-3.3-70B-Instruct-Turbo-Free")
 EVALUATOR_LLM_NAME = os.getenv("EVALUATOR_LLM_NAME", "meta-llama/Llama-3.3-70B-Instruct-Turbo-Free")
 
-DOCUMENTS_SAMPLE_SIZE = os.getenv("DOCUMENTS_SAMPLE_SIZE", 100)
-QUERY_SAMPLE_SIZE = os.getenv("QUERY_SAMPLE_SIZE", 5)
+DOCUMENTS_SAMPLE_SIZE = int(os.getenv("DOCUMENTS_SAMPLE_SIZE", 100))
+QUERY_SAMPLE_SIZE = int(os.getenv("QUERY_SAMPLE_SIZE", 5))
+print(f"EMBEDDING_MODEL_NAME: {EMBEDDING_MODEL_NAME}")
+print(f"LLM_MODEL_NAME: {LLM_MODEL_NAME}")
+print(f"EVALUATOR_LLM_NAME: {EVALUATOR_LLM_NAME}")
+print(f"DOCUMENTS_SAMPLE_SIZE: {DOCUMENTS_SAMPLE_SIZE}")
+print(f"QUERY_SAMPLE_SIZE: {QUERY_SAMPLE_SIZE}")
 
 def run_evaluation():
     dataloader = DollyDataLoader(sample_size=DOCUMENTS_SAMPLE_SIZE)

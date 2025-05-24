@@ -1,5 +1,27 @@
 version: 2.1
 
+parameters:
+  embedding_model:
+    type: string
+    default: "BAAI/bge-base-en-v1.5" # Default value
+    description: "Embedding model name for the RAG pipeline."
+  llm_model:
+    type: string
+    default: "meta-llama/Llama-3.3-70B-Instruct-Turbo-Free"
+    description: "LLM model name for the RAG pipeline."
+  evaluator_llm_model:
+    type: string
+    default: "meta-llama/Llama-3.3-70B-Instruct-Turbo-Free"
+    description: "LLM model name used by RAGAS for evaluation metrics."
+  doc_sample_size:
+    type: integer
+    default: 100
+    description: "Number of documents to sample from Dolly dataset for vector store."
+  query_sample_size:
+    type: integer
+    default: 5
+    description: "Number of queries to sample from Dolly dataset for evaluation."
+
 jobs:
   rag_evaluation:
     docker:
@@ -11,7 +33,13 @@ jobs:
           command: pip install -r requirements.txt
       - run:
           name: Run RAGAS Evaluation
-          command: python3 main.py
+          command: |
+            EMBEDDING_MODEL_NAME="<< pipeline.parameters.embedding_model >>" \
+            LLM_MODEL_NAME="<< pipeline.parameters.llm_model >>" \
+            EVALUATOR_LLM_NAME="<< pipeline.parameters.evaluator_llm_model >>" \
+            DOCUMENTS_SAMPLE_SIZE="<< pipeline.parameters.doc_sample_size >>" \
+            QUERY_SAMPLE_SIZE="<< pipeline.parameters.query_sample_size >>" \
+            python3 main.py
       - store_artifacts:
           path: ragas_results.csv
           destination: ragas_evaluation_results
