@@ -3,15 +3,15 @@ version: 2.1
 parameters:
   embedding_model:
     type: string
-    default: "BAAI/bge-base-en-v1.5" # Default value
+    default: "BAAI/bge-base-en-v1.5"
     description: "Embedding model name for the RAG pipeline."
   llm_model:
     type: string
-    default: "meta-llama/Llama-3.3-70B-Instruct-Turbo-Free"
+    default: "meta-llama/Meta-Llama-3.1-8B-Instruct-Turbo"
     description: "LLM model name for the RAG pipeline."
   evaluator_llm_model:
     type: string
-    default: "meta-llama/Llama-3.3-70B-Instruct-Turbo-Free"
+    default: "Qwen/Qwen2.5-7B-Instruct-Turbo"
     description: "LLM model name used by RAGAS for evaluation metrics."
   doc_sample_size:
     type: integer

@@ -7,11 +7,12 @@ from rag_pipeline.pipeline import RAGPipeline
 from rag_pipeline.evaluator import RAGASEvaluator
 
 EMBEDDING_MODEL_NAME = os.getenv("EMBEDDING_MODEL_NAME", "BAAI/bge-base-en-v1.5")
-LLM_MODEL_NAME = os.getenv("LLM_MODEL_NAME", "meta-llama/Llama-3.3-70B-Instruct-Turbo-Free")
-EVALUATOR_LLM_NAME = os.getenv("EVALUATOR_LLM_NAME", "meta-llama/Llama-3.3-70B-Instruct-Turbo-Free")
+LLM_MODEL_NAME = os.getenv("LLM_MODEL_NAME", "meta-llama/Meta-Llama-3.1-8B-Instruct-Turbo")
+EVALUATOR_LLM_NAME = os.getenv("EVALUATOR_LLM_NAME", "Qwen/Qwen2.5-7B-Instruct-Turbo")
 
 DOCUMENTS_SAMPLE_SIZE = int(os.getenv("DOCUMENTS_SAMPLE_SIZE", 100))
 QUERY_SAMPLE_SIZE = int(os.getenv("QUERY_SAMPLE_SIZE", 5))
+
 print(f"EMBEDDING_MODEL_NAME: {EMBEDDING_MODEL_NAME}")
 print(f"LLM_MODEL_NAME: {LLM_MODEL_NAME}")
 print(f"EVALUATOR_LLM_NAME: {EVALUATOR_LLM_NAME}")
@@ -41,23 +42,22 @@ def run_evaluation():
 
     with open("rag_results.json", "w") as _f:
         json.dump(rag_results, _f, indent=4)
-    print("RAG query results saved to rag_results.json")
+        print("RAG query results saved to rag_results.json")
 
     ragas_evaluator = RAGASEvaluator(evaluator_llm_provider)
     evaluation_df = ragas_evaluator.evaluate_results(rag_results)
 
-
-    faithfulness_score = evaluation_df["faithfulness"].mean() # Ragas returns a score for each sample, use mean for overall
+    # -- Ragas returns a score for each sample, use mean for overall --
+    faithfulness_score = evaluation_df["faithfulness"].mean() 
     context_recall_score = evaluation_df["context_recall"].mean()
     factual_correctness_score = evaluation_df["factual_correctness(mode=f1)"].mean()
 
-    # print("\n--- RAGAS Evaluation Results ---")
+    print("\n--- RAGAS Evaluation Results ---")
     print(f"Average Faithfulness Score: {faithfulness_score:.2f}")
     print(f"Average Context Recall Score: {context_recall_score:.2f}")
     print(f"Average Factual Correctness Score: {factual_correctness_score:.2f}")
 
     evaluation_df.to_csv("ragas_results.csv", index=False)
-    # print("\nEvaluation results saved to ragas_results.csv")
 
 
 
